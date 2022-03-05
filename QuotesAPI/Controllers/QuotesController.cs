@@ -4,44 +4,40 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using QuotesAPI.Data;
 using QuotesAPI.Models;
 
 namespace QuotesAPI.Controllers
 {
     public class QuotesController : ApiController
     {
-        static List<Quote> _quotes = new List<Quote>()
-        {
-            new Quote()
-            {
-                Id = 0,
-                Author = "Einstein",
-                Description = "Imagination is more important than knowledge.",
-                Title = "Imagination"
-            },
-            new Quote()
-            {
-                Id = 1,
-                Author = "Einstein",
-                Description = "Imagination is more important than knowledge.",
-                Title = "Imagination"
-            }
-        };
-
+        QuotesDBContext quotesDBContext = new QuotesDBContext();
+        // GET: api/Quotes
         public IEnumerable<Quote> Get()
         {
-            return _quotes;
+            return quotesDBContext.Quotes;
         }
 
-        public void Post([FromBody] Quote quote)
+        // GET: api/Quotes/5
+        public Quote Get(int id)
         {
-            _quotes.Add(quote);
+            var quote = quotesDBContext.Quotes.Find(id);
+            return quote;
         }
 
-        public void Put(int id, [FromBody] Quote quote)
+        // POST: api/Quotes
+        public void Post([FromBody]string value)
         {
-            //list _quotes index id will be set to the quote argument
-            _quotes[id] = quote;
+        }
+
+        // PUT: api/Quotes/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE: api/Quotes/5
+        public void Delete(int id)
+        {
         }
     }
 }
