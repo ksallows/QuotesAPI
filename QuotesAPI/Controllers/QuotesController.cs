@@ -34,6 +34,10 @@ namespace QuotesAPI.Controllers
         // POST: api/Quotes
         public IHttpActionResult Post([FromBody]Quote quote)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             quotesDBContext.Quotes.Add(quote);
             quotesDBContext.SaveChanges(); //need this for changes to save to db...
             return StatusCode(HttpStatusCode.Created);
@@ -42,6 +46,10 @@ namespace QuotesAPI.Controllers
         // PUT: api/Quotes/5
         public IHttpActionResult Put(int id, [FromBody]Quote quote)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             // lambda expressions
             // (input-parameters) => expression
             // takes parameter q, and returns matches where the q.Id is the id given for update
