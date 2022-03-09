@@ -12,7 +12,9 @@ namespace QuotesAPI.Controllers
     public class QuotesController : ApiController
     {
         QuotesDBContext quotesDBContext = new QuotesDBContext();
-        // GET: api/GetQuotes
+
+        [HttpGet]
+        [Route("api/Quotes/All/{sort=asc}")]
         public IHttpActionResult GetQuotes(string sort)
         {
             IQueryable<Quote> quotes;
@@ -31,7 +33,16 @@ namespace QuotesAPI.Controllers
             return Ok(quotes);
         }
 
-        // GET: api/GetQuote/5
+        [HttpGet]
+        [Route("api/Quotes/page/{pageNumber=1}/{pageSize=5}")]
+        public IHttpActionResult Pagination(int pageNumber, int pageSize)
+        {
+            var quotes = quotesDBContext.Quotes.OrderBy(q => q.Id);
+            return Ok(quotes.Skip((pageNumber - 1) * pageSize).Take(pageSize));
+        }
+
+        [HttpGet]
+        [Route("api/Quotes/Quote/{id=}")]
         public IHttpActionResult GetQuote(int id)
         {
             var quote = quotesDBContext.Quotes.Find(id);
@@ -39,7 +50,6 @@ namespace QuotesAPI.Controllers
             return Ok(quote);
         }
 
-        // POST: api/Quotes
         public IHttpActionResult Post([FromBody]Quote quote)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -48,7 +58,6 @@ namespace QuotesAPI.Controllers
             return StatusCode(HttpStatusCode.Created);
         }
 
-        // PUT: api/Quotes/5
         public IHttpActionResult Put(int id, [FromBody]Quote quote)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -64,7 +73,7 @@ namespace QuotesAPI.Controllers
             return Ok("Quote updated");
         }
 
-        // DELETE: api/Quotes/5
+
         public IHttpActionResult Delete(int id)
         {
             var quote = quotesDBContext.Quotes.Find(id);
