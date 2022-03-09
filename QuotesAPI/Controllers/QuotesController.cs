@@ -13,10 +13,21 @@ namespace QuotesAPI.Controllers
     {
         QuotesDBContext quotesDBContext = new QuotesDBContext();
         // GET: api/GetQuotes
-        public IHttpActionResult GetQuotes()
+        public IHttpActionResult GetQuotes(string sort)
         {
-            var quotes = quotesDBContext.Quotes;
-            //return StatusCode(quotes);
+            IQueryable<Quote> quotes;
+            switch (sort)
+            {
+                case "desc":
+                    quotes = quotesDBContext.Quotes.OrderByDescending(q => q.CreatedAt);
+                    break;
+                case "asc":
+                    quotes = quotesDBContext.Quotes.OrderBy(q => q.CreatedAt);
+                    break;
+                default:
+                    quotes = quotesDBContext.Quotes;
+                    break;
+            }
             return Ok(quotes);
         }
 
