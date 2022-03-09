@@ -50,6 +50,14 @@ namespace QuotesAPI.Controllers
             return Ok(quote);
         }
 
+        [HttpGet]
+        [Route("api/Quotes/Search/{type=}")]
+        public IHttpActionResult Search(string type)
+        {
+            var quotes = quotesDBContext.Quotes.Where(q => q.Type.StartsWith(type));
+            return Ok(quotes);
+        }
+
         public IHttpActionResult Post([FromBody]Quote quote)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
